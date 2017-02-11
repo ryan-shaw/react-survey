@@ -5,6 +5,7 @@ import {
 } from 'material-ui/Stepper';
 import styles from './styles.scss';
 import Message from '../../components/Questions/Message';
+import Boolean from '../../components/Questions/Boolean';
 import survey from '../../survey.json';
 
 class Survey extends Component {
@@ -40,7 +41,7 @@ class Survey extends Component {
                 );
             case 'boolean':
                 return (
-                    <Message
+                    <Boolean
                         key={key}
                         settings={question}
                         next={this.handleNext}
