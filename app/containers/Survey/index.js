@@ -6,6 +6,7 @@ import {
 import styles from './styles.scss';
 import Message from '../../components/Questions/Message';
 import Boolean from '../../components/Questions/Boolean';
+import SingleChoice from '../../components/Questions/SingleChoice';
 import survey from '../../survey.json';
 import { find } from 'lodash/collection';
 import { extend } from 'lodash/object';
@@ -50,6 +51,15 @@ class Survey extends Component {
                     <Boolean
                         key={key}
                         updateAnswer={this.updateAnswer(key, 'boolean')}
+                        settings={question}
+                        next={this.handleNext}
+                        back={this.handlePrev}/>
+                );
+            case 'single_choice':
+                return (
+                    <SingleChoice
+                        key={key}
+                        updateAnswer={this.updateAnswer(key, 'single_choice')}
                         settings={question}
                         next={this.handleNext}
                         back={this.handlePrev}/>

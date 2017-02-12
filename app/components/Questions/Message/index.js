@@ -33,7 +33,7 @@ class Message extends React.Component {
                     <p style={{ marginBottom: 0 }}>{this.props.settings.text}</p>
                     <div style={{ margin: '12px 0' }}>
                         <RaisedButton
-                            label={this.props.settings.next_text || 'Next'}
+                            label={this.props.last ? 'Finish' : this.props.settings.next_text || 'Next'}
                             disableTouchRipple
                             disableFocusRipple
                             primary

@@ -5,12 +5,34 @@ import {
     StepContent
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
+import RadioButton, { RadioButtonGroup } from 'material-ui/RadioButton';
 
+const style = {
+    radioButton: {
+        paddingBottom: 10
+    }
+};
 
 class Choice extends React.Component {
 
     constructor() {
         super();
+    }
+
+    renderChoices() {
+        return this.props.settings.choices.map((ele, key) => {
+            return (
+                <RadioButton
+                    key={key}
+                    label={ele[0]}
+                    style={style.radioButton}
+                    value={ele[1]}/>
+            );
+        });
+    }
+
+    updateAnswer = (event, value) => {
+        this.props.updateAnswer(value);
     }
 
     render() {
@@ -30,6 +52,13 @@ class Choice extends React.Component {
                 last={last}>
                 <StepLabel>{this.props.settings.title}</StepLabel>
                 <StepContent>
+                    <RadioButtonGroup style={{padding: 13}}
+                        name="group"
+                        onChange={this.updateAnswer}>
+                        {
+                            this.renderChoices()
+                        }
+                    </RadioButtonGroup>
                     <div style={{ margin: '12px 0' }}>
                         <RaisedButton
                             label={this.props.settings.next_text || 'Next'}
@@ -59,6 +88,7 @@ Choice.propTypes = {
     }),
     next: PropTypes.func,
     back: PropTypes.func,
+    updateAnswer: PropTypes.func.isRequired,
 };
 
 // Choice.propTypes = PropTypes.any;

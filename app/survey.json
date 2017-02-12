@@ -26,6 +26,23 @@
             },
             {
                 "id": "4",
+                "title": "Single choice",
+                "type": "single_choice",
+                "text": "Test",
+                "choices": [
+                    ["Choice 1", 1],
+                    ["Choice 2", 2],
+                    ["Choice 3", 3]
+                ]
+            },
+            {
+                "id": "5",
+                "title": "Oh my",
+                "type": "message",
+                "text": "Test"
+            },
+            {
+                "id": "6",
                 "title": "Thanks",
                 "type": "message",
                 "text": "Thanks"
@@ -35,12 +52,20 @@
     "edges": {
         "q:1": "q:2",
         "q:3": "q:4",
+        "q:4": {
+            "conditions": [
+                ["a:q:4", "=", 1]
+            ],
+            "next": "5",
+            "else": "6"
+        },
         "q:2": {
             "conditions": [
                 ["a:q:2", "=", false]
             ],
             "next": "3",
             "else": "4"
-        }
+        },
+        "q:5": "q:6"
     }
 }
