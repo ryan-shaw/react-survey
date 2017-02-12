@@ -20,6 +20,10 @@ class Boolean extends React.Component {
         super();
     }
 
+    updateAnswer = (event, value) => {
+        this.props.updateAnswer(value);
+    }
+
     render() {
         const {
             active,
@@ -38,7 +42,8 @@ class Boolean extends React.Component {
                 <StepLabel>{this.props.settings.title}</StepLabel>
                 <StepContent>
                     <RadioButtonGroup style={{padding: 13}}
-                        name="group">
+                        name="group"
+                        onChange={this.updateAnswer}>
                         <RadioButton
                             label={this.props.settings.text_false}
                             style={style.radioButton}
@@ -83,6 +88,7 @@ Boolean.propTypes = {
     }),
     next: PropTypes.func,
     back: PropTypes.func,
+    updateAnswer: PropTypes.func.isRequired,
 };
 
 // Boolean.propTypes = PropTypes.any;
