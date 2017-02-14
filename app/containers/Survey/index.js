@@ -10,6 +10,7 @@ import SingleChoice from '../../components/Questions/SingleChoice';
 import survey from '../../survey.json';
 import { find } from 'lodash/collection';
 import { extend } from 'lodash/object';
+import Graph from '../Graph';
 
 class Survey extends Component {
 
@@ -18,12 +19,16 @@ class Survey extends Component {
         answers: {}
     }
 
-    handleNext = () => {
-        const {stepIndex} = this.state;
-        this.setState({
-            stepIndex: stepIndex + 1,
-            finished: stepIndex >= 2,
-        });
+    handleNext = (key) => {
+        return () => {
+            if(!survey.edges[`q:${key}`]) {
+                console.log('Finished!');
+            }
+            const {stepIndex} = this.state;
+            this.setState({
+                stepIndex: stepIndex + 1,
+            });
+        };
     };
 
     handlePrev = () => {
@@ -43,7 +48,7 @@ class Survey extends Component {
                     <Message
                         key={key}
                         settings={question}
-                        next={this.handleNext}
+                        next={this.handleNext(key)}
                         back={this.handlePrev}/>
                 );
             case 'boolean':
@@ -51,8 +56,9 @@ class Survey extends Component {
                     <Boolean
                         key={key}
                         updateAnswer={this.updateAnswer(key, 'boolean')}
+                        initialState={this.state.answers[`a:q:${key}`]}
                         settings={question}
-                        next={this.handleNext}
+                        next={this.handleNext(key)}
                         back={this.handlePrev}/>
                 );
             case 'single_choice':
@@ -60,8 +66,9 @@ class Survey extends Component {
                     <SingleChoice
                         key={key}
                         updateAnswer={this.updateAnswer(key, 'single_choice')}
+                        initialState={this.state.answers[`a:q:${key}`]}
                         settings={question}
-                        next={this.handleNext}
+                        next={this.handleNext(key)}
                         back={this.handlePrev}/>
                 );
             default:
@@ -79,6 +86,22 @@ class Survey extends Component {
             answers[`a:q:${id}`] = value;
             this.setState(extend(this.state, { answers }));
         };
+    }
+
+    conditionCheck(arg1, operator, arg2) {
+        if(operator === '==') {
+            return arg1 === arg2;
+        }else if(operator === '!=') {
+            return arg1 !== arg2;
+        }
+        if(typeof arg1 === 'number' && typeof arg2 === 'number') {
+            if(operator === '>=') {
+                return arg1 >= arg2;
+            }else if(operator === '<=') {
+                return arg1 <= arg2;
+            }
+        }
+        return false;
     }
 
     /**
@@ -101,11 +124,12 @@ class Survey extends Component {
                 questions.concat(this.renderEdges(qnext, questions));
             }
         }else if(typeof edge === 'object') {
-            let qnext = find(survey.questions[0], {id: edge.else});
+            let qnext = find(survey.questions[0], {id: edge.else.split(':')[1]});
             const conditions = edge.conditions;
             const condition = this.state.answers[conditions[0][0]];
-            if(condition === conditions[0][2]) {
-                qnext = find(survey.questions[0], {id: edge.next});
+            const operator = conditions[0][1];
+            if(this.conditionCheck(condition, operator, conditions[0][2])) {
+                qnext = find(survey.questions[0], {id: edge.next.split(':')[1]});
             }
             if(qnext) {
                 questions.concat(this.renderEdges(qnext, questions));
@@ -133,6 +157,8 @@ class Survey extends Component {
                         }
                     </Stepper>
                 </Paper>
+                <Graph survey={survey}/>
+                <pre>{JSON.stringify(this.state.answers)}</pre>
             </div>
         );
     }

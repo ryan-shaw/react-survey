@@ -5,6 +5,7 @@ import {
     StepContent
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import RadioButton, { RadioButtonGroup } from 'material-ui/RadioButton';
 
 const style = {
@@ -15,8 +16,13 @@ const style = {
 
 class Choice extends React.Component {
 
-    constructor() {
+    constructor(props) {
         super();
+        this.state.selected = props.initialState;
+    }
+
+    state = {
+        selected: null
     }
 
     renderChoices() {
@@ -33,6 +39,7 @@ class Choice extends React.Component {
 
     updateAnswer = (event, value) => {
         this.props.updateAnswer(value);
+        this.setState({selected: value});
     }
 
     render() {
@@ -54,7 +61,8 @@ class Choice extends React.Component {
                 <StepContent>
                     <RadioButtonGroup style={{padding: 13}}
                         name="group"
-                        onChange={this.updateAnswer}>
+                        onChange={this.updateAnswer}
+                        valueSelected={this.state.selected}>
                         {
                             this.renderChoices()
                         }
@@ -66,6 +74,12 @@ class Choice extends React.Component {
                             disableFocusRipple
                             primary
                             onTouchTap={this.props.next}
+                            style={{ marginRight: 12 }} />
+                        <FlatButton
+                            label="Back"
+                            disableTouchRipple
+                            disableFocusRipple
+                            onTouchTap={this.props.back}
                             style={{ marginRight: 12 }} />
                     </div>
                 </StepContent>
@@ -89,6 +103,7 @@ Choice.propTypes = {
     next: PropTypes.func,
     back: PropTypes.func,
     updateAnswer: PropTypes.func.isRequired,
+    initialState: PropTypes.any,
 };
 
 // Choice.propTypes = PropTypes.any;

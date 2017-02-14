@@ -1526,6 +1526,10 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
+cytoscape@^2.7.14:
+  version "2.7.14"
+  resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-2.7.14.tgz#a7795db9d507465bee0c7f42b0a05724847aa9bf"
+
 d@^0.1.1, d@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/d/-/d-0.1.1.tgz#da184c535d18d8ee7ba2aa229b914009fae11309"

@@ -54,17 +54,17 @@
         "q:3": "q:4",
         "q:4": {
             "conditions": [
-                ["a:q:4", "=", 1]
+                ["a:q:4", "==", 1]
             ],
-            "next": "5",
-            "else": "6"
+            "next": "q:5",
+            "else": "q:6"
         },
         "q:2": {
             "conditions": [
-                ["a:q:2", "=", false]
+                ["a:q:2", "==", false]
             ],
-            "next": "3",
-            "else": "4"
+            "next": "q:3",
+            "else": "q:4"
         },
         "q:5": "q:6"
     }

@@ -16,12 +16,18 @@ const style = {
 
 class Boolean extends React.Component {
 
-    constructor() {
+    constructor(props) {
         super();
+        this.state.selected = props.initialState;
     }
+
+    state = {
+        selected: null
+    };
 
     updateAnswer = (event, value) => {
         this.props.updateAnswer(value);
+        this.setState({selected: value});
     }
 
     render() {
@@ -43,7 +49,8 @@ class Boolean extends React.Component {
                 <StepContent>
                     <RadioButtonGroup style={{padding: 13}}
                         name="group"
-                        onChange={this.updateAnswer}>
+                        onChange={this.updateAnswer}
+                        valueSelected={this.state.selected}>
                         <RadioButton
                             label={this.props.settings.text_false}
                             style={style.radioButton}
@@ -89,6 +96,7 @@ Boolean.propTypes = {
     next: PropTypes.func,
     back: PropTypes.func,
     updateAnswer: PropTypes.func.isRequired,
+    initialState: PropTypes.bool,
 };
 
 // Boolean.propTypes = PropTypes.any;

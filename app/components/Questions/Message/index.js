@@ -5,6 +5,7 @@ import {
     StepContent
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 
 
 class Message extends React.Component {
@@ -38,6 +39,12 @@ class Message extends React.Component {
                             disableFocusRipple
                             primary
                             onTouchTap={this.props.next}
+                            style={{ marginRight: 12 }} />
+                        <FlatButton
+                            label="Back"
+                            disableTouchRipple
+                            disableFocusRipple
+                            onTouchTap={this.props.back}
                             style={{ marginRight: 12 }} />
                     </div>
                 </StepContent>
