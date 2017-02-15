@@ -1,4 +1,6 @@
 {
+    "id": "xxx",
+    "revision": 1,
     "name": "Survey exmaple",
     "start": "1",
     "questions": [

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import Survey from './containers/Survey';
+import Example from './containers/Example';
 
 export default (
-	<Route path="/" component={Survey}>
-		<IndexRoute component={Survey} />
+	<Route path="/" component={Example}>
+		<IndexRoute component={Example} />
 		{/* <Route path="/about" component={About} /> */}
 	</Route>
 );

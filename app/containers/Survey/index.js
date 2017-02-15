@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
 import {
     Stepper,
@@ -7,10 +7,8 @@ import styles from './styles.scss';
 import Message from '../../components/Questions/Message';
 import Boolean from '../../components/Questions/Boolean';
 import SingleChoice from '../../components/Questions/SingleChoice';
-import survey from '../../survey.json';
 import { find } from 'lodash/collection';
 import { extend } from 'lodash/object';
-import Graph from '../Graph';
 
 class Survey extends Component {
 
@@ -21,8 +19,8 @@ class Survey extends Component {
 
     handleNext = (key) => {
         return () => {
-            if(!survey.edges[`q:${key}`]) {
-                console.log('Finished!');
+            if(!this.props.survey.edges[`q:${key}`]) {
+                this.props.onFinish(this.state.answers);
             }
             const {stepIndex} = this.state;
             this.setState({
@@ -112,24 +110,24 @@ class Survey extends Component {
      */
     renderEdges(question, questions = []) {
         const id = question.id;
-        const q = find(survey.questions[0], {id});
+        const q = find(this.props.survey.questions[0], {id});
         if(!q) {
             return questions;
         }
-        const edge = survey.edges[`q:${id}`];
+        const edge = this.props.survey.edges[`q:${id}`];
         questions.push(this.getComponent(q, id));
         if(typeof edge === 'string') {
-            const qnext = find(survey.questions[0], {id: edge.split(':')[1]});
+            const qnext = find(this.props.survey.questions[0], {id: edge.split(':')[1]});
             if(qnext) {
                 questions.concat(this.renderEdges(qnext, questions));
             }
         }else if(typeof edge === 'object') {
-            let qnext = find(survey.questions[0], {id: edge.else.split(':')[1]});
+            let qnext = find(this.props.survey.questions[0], {id: edge.else.split(':')[1]});
             const conditions = edge.conditions;
             const condition = this.state.answers[conditions[0][0]];
             const operator = conditions[0][1];
             if(this.conditionCheck(condition, operator, conditions[0][2])) {
-                qnext = find(survey.questions[0], {id: edge.next.split(':')[1]});
+                qnext = find(this.props.survey.questions[0], {id: edge.next.split(':')[1]});
             }
             if(qnext) {
                 questions.concat(this.renderEdges(qnext, questions));
@@ -141,8 +139,12 @@ class Survey extends Component {
     /**
      * Start recursive building of questions
      */
-    renderQuestions(id = survey.start) {
-        const q = find(survey.questions[0], {id});
+    renderQuestions(_id = null) {
+        let id = _id;
+        if(id === null) {
+            id = this.props.survey.start;
+        }
+        const q = find(this.props.survey.questions[0], {id});
         return this.renderEdges(q);
     }
 
@@ -157,11 +159,14 @@ class Survey extends Component {
                         }
                     </Stepper>
                 </Paper>
-                <Graph survey={survey}/>
-                <pre>{JSON.stringify(this.state.answers)}</pre>
             </div>
         );
     }
 }
+
+Survey.propTypes = {
+    survey: PropTypes.object.isRequired,
+    onFinish: PropTypes.func,
+};
 
 export default Survey;
